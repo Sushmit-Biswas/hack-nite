@@ -8,7 +8,7 @@ import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+// import { Input } from "@/components/ui/input"
 
 import FormField from "@/components/FormField";
 import { useRouter } from "next/navigation";
@@ -43,6 +43,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     try {
       if (type === "sign-up") {
         const { name, email, password } = values;
+
         const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
         const result = await signUp({
           uid: userCredentials.user.uid,
@@ -62,7 +63,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
           
       } else {
         const {email, password} = values;
+
         const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+        
         const idToken = await userCredentials.user.getIdToken();
 
         if(!idToken) {

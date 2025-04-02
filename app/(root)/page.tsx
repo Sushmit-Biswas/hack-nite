@@ -1,22 +1,25 @@
-import InterviewCard from '@/components/InterviewCard';
-import { Button } from '@/components/ui/button'
-import { getCurrentUser} from '@/lib/actions/auth.action';
-import { getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action';
-import Image from 'next/image';
-import Link from 'next/link'
-import React from 'react'
+import Link from "next/link";
+import Image from "next/image";
 
-const Page = async () => {
+import { Button } from "@/components/ui/button";
+import InterviewCard from "@/components/InterviewCard";
 
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import {
+  getInterviewsByUserId,
+  getLatestInterviews,
+} from "@/lib/actions/general.action";
+
+async function Home() {
   const user = await getCurrentUser();
 
-  const [userInterviews, latestInterviews] = await Promise.all([
+  const [userInterviews, allInterview] = await Promise.all([
     getInterviewsByUserId(user?.id!),
-    getLatestInterviews({ userId: user?.id! })
+    getLatestInterviews({ userId: user?.id! }),
   ]);
-   
-  const hasPastInterviews = userInterviews?.length > 0;
-  const hasUpcomingInterviews = latestInterviews?.length > 0;
+
+  const hasPastInterviews = userInterviews?.length! > 0;
+  const hasUpcomingInterviews = allInterview?.length! > 0;
 
   return (
     <>
@@ -31,9 +34,10 @@ const Page = async () => {
             <Link href="/interview">Start an Interview</Link>
           </Button>
         </div>
+
         <Image
           src="/robot.png"
-          alt="robo-boi"
+          alt="robo-dude"
           width={400}
           height={400}
           className="max-sm:hidden"
@@ -44,13 +48,21 @@ const Page = async () => {
         <h2>Your Interviews</h2>
 
         <div className="interviews-section">
-            {hasPastInterviews ? (
-              userInterviews?.map((interview) => (
-                <InterviewCard {...interview} key={interview.id} />
-              ))) : (
-              <p>You haven&apos;t taken any interviews yet</p>
-            )}
-        
+          {hasPastInterviews ? (
+            userInterviews?.map((interview) => (
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                id={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
+            ))
+          ) : (
+            <p>You haven&apos;t taken any interviews yet</p>
+          )}
         </div>
       </section>
 
@@ -58,18 +70,25 @@ const Page = async () => {
         <h2>Take Interviews</h2>
 
         <div className="interviews-section">
-          {hasUpcomingInterviews? (
-                latestInterviews?.map((interview) => (
-                  <InterviewCard {...interview} key={interview.id} />
-                ))) : (
-                <p>There are no new interviews available</p>
-              )}
-
-            
+          {hasUpcomingInterviews ? (
+            allInterview?.map((interview) => (
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                id={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
+            ))
+          ) : (
+            <p>There are no interviews available</p>
+          )}
         </div>
       </section>
     </>
   );
 }
 
-export default Page;
+export default Home;

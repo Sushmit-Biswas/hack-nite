@@ -4,8 +4,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import {
-  getFeedbackByInterviewId,
-  getInterviewById,
+  getFeedbackByInterviewId, getInterviewById, 
 } from "@/lib/actions/general.action";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/auth.action";
@@ -19,7 +18,7 @@ const Feedback = async ({ params }: RouteParams) => {
 
   const feedback = await getFeedbackByInterviewId({
     interviewId: id,
-    userId: user?.id!,
+    userId: user?.id!, // ignore eslint error
   });
 
   return (

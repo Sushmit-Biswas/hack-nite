@@ -1,32 +1,38 @@
-'use client';
+"use client";
 
-import { interviewer } from '@/constants';
-import { createFeedback } from '@/lib/actions/general.action';
-import { cn } from '@/lib/utils';
-import { vapi } from '@/lib/vapi.sdk';
-import Image from 'next/image'
-import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { vapi } from "@/lib/vapi.sdk";
+import { interviewer } from "@/constants";
+import { createFeedback } from "@/lib/actions/general.action";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
   CONNECTING = "CONNECTING",
-  ACTIVE = 'ACTIVE',
+  ACTIVE = "ACTIVE",
   FINISHED = "FINISHED",
 }
 
-// 2:45
 interface SavedMessage {
   role: "user" | "system" | "assistant";
   content: string;
 }
 
-const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) => {
+const Agent = ({
+  userName,
+  userId,
+  interviewId,
+  feedbackId,
+  type,
+  questions,
+}: AgentProps) => {
   const router = useRouter();
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [lastMessage, setLastMessage] = useState<string>("");
 
   useEffect(() => {
     const onCallStart = () => {
@@ -87,7 +93,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         interviewId: interviewId!,
         userId: userId!,
         transcript: messages,
-        // feedbackId,
+        feedbackId,
       });
 
       if (success && id) {
@@ -96,7 +102,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         console.log("Error saving feedback");
         router.push("/");
       }
-    }; 
+    };
 
     if (callStatus === CallStatus.FINISHED) {
       if (type === "generate") {
@@ -105,7 +111,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         handleGenerateFeedback(messages);
       }
     }
-  }, [messages, callStatus, type, userId]);
+  }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
@@ -138,9 +144,6 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     vapi.stop();
   };
 
-  const lastestMessage = messages[messages.length - 1]?.content;
-  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
-
   return (
     <>
       <div className="call-view">
@@ -149,7 +152,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
           <div className="avatar">
             <Image
               src="/ai-avatar.png"
-              alt="AI Avatar"
+              alt="profile-image"
               width={65}
               height={54}
               className="object-cover"
@@ -164,7 +167,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
           <div className="card-content">
             <Image
               src="/user-avatar.png"
-              alt="User Avatar"
+              alt="profile-image"
               width={539}
               height={539}
               className="rounded-full object-cover size-[120px]"
@@ -178,20 +181,20 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         <div className="transcript-border">
           <div className="transcript">
             <p
-              key={lastestMessage}
+              key={lastMessage}
               className={cn(
                 "transition-opacity duration-500 opacity-0",
                 "animate-fadeIn opacity-100"
               )}
             >
-              {lastestMessage}
+              {lastMessage}
             </p>
           </div>
         </div>
       )}
 
       <div className="w-full flex justify-center">
-        {callStatus !== 'ACTIVE' ? (
+        {callStatus !== "ACTIVE" ? (
           <button className="relative btn-call" onClick={() => handleCall()}>
             <span
               className={cn(
@@ -201,7 +204,9 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
             />
 
             <span className="relative">
-              {isCallInactiveOrFinished ? "Call" : ". . ."}
+              {callStatus === "INACTIVE" || callStatus === "FINISHED"
+                ? "Call"
+                : ". . ."}
             </span>
           </button>
         ) : (
