@@ -22,28 +22,6 @@ MockMate is a web application designed to help users prepare for job interviews 
 
 ---
 
-## 📊 Project Statistics & Health (Placeholders)
-
-*(Suggestion: Integrate tools like Codecov, Snyk, or GitHub Actions badges here)*
-
-*   **Code Coverage:** [![codecov](https://codecov.io/gh/your-username/hack-nite/graph/badge.svg?token=YOUR_CODECOV_TOKEN)](https://codecov.io/gh/your-username/hack-nite)
-*   **Build Status:** `[Build Passing Badge]`
-*   **Dependencies:** `[Dependency Status Badge]`
-*   **Lines of Code:** *(Use a tool like `cloc` to generate)*
-
-```mermaid
-graph TD
-    A[User Signs Up/In] --> B{Selects Interview Type};
-    B --> C[Starts Interview Session];
-    C --> D{Interacts with AI Agent (Vapi)};
-    D --> E[Session Ends];
-    E --> F{Receives Feedback};
-    F --> G[Reviews Performance];
-```
-*(Mermaid diagram showing basic user flow)*
-
----
-
 ## ✨ Key Features
 
 *   🗣️ **AI-Powered Interviews:** Engage in realistic voice conversations.
@@ -58,14 +36,13 @@ graph TD
 
 ## 🛠️ Tech Stack
 
-*   **Framework:** [Next.js](https://nextjs.org/) 14+ <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg" alt="Next.js" width="20" height="20"/>
+*   **Framework:** [Next.js](https://nextjs.org/)<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg" alt="Next.js" width="20" height="20"/>
 *   **Language:** [TypeScript](https://www.typescriptlang.org/) <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="20" height="20"/>
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-plain.svg" alt="Tailwind CSS" width="20" height="20"/>
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) <img src="https://camo.githubusercontent.com/f36990f11f932129fd60e5d06de1d4340057f62caddd151453609d6ad28b069f/68747470733a2f2f6564656e742e6769746875622e696f2f537570657254696e7949636f6e732f696d616765732f7376672f7461696c77696e644373732e737667" alt="Tailwind CSS" width="20" height="20"/>
 *   **Backend & Auth:** [Firebase (Auth, Firestore)](https://firebase.google.com/) <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/firebase/firebase-plain.svg" alt="Firebase" width="20" height="20"/>
 *   **AI Voice Agent:** [Vapi](https://vapi.ai/)
 *   **UI Components:** [Shadcn/ui](https://ui.shadcn.com/)
-*   **State Management:** React Context / Zustand (Verify which one is used)
-*   **Deployment:** Vercel / Netlify / Other (Specify)
+*   **Deployment:** Vercel
 
 ---
 
@@ -75,7 +52,7 @@ Follow these steps to set up and run the project locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/hack-nite.git
+    git clone https://github.com/Sushmit-Biswas/hack-nite.git
     cd hack-nite
     ```
 
@@ -92,22 +69,28 @@ Follow these steps to set up and run the project locally:
     Create a `.env.local` file in the root directory and add the necessary environment variables. Refer to `.env.example` (if available) or the required keys below:
     ```plaintext
     # Firebase Configuration (obtain from your Firebase project console)
-    NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
-    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
-    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
-    NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
+    NEXT_PUBLIC_FIREBASE_API_KEY=
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+    NEXT_PUBLIC_FIREBASE_APP_ID=
+    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+    
     # For Firebase Admin SDK (used in backend functions/API routes)
-    FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n"
-    FIREBASE_CLIENT_EMAIL=YOUR_CLIENT_EMAIL
+    FIREBASE_PRIVATE_KEY=
+    FIREBASE_CLIENT_EMAIL=
+    FIREBASE_PROJECT_ID=
 
     # Vapi Configuration (obtain from Vapi dashboard)
-    NEXT_PUBLIC_VAPI_PUBLIC_KEY=YOUR_VAPI_PUBLIC_KEY
-    VAPI_PRIVATE_KEY=YOUR_VAPI_PRIVATE_KEY
+    NEXT_PUBLIC_VAPI_WEB_TOKEN=
+    NEXT_PUBLIC_VAPI_WORKFLOW_ID=
+
+    # Google AI Studio Configuration
+    GOOGLE_GENERATIVE_AI_API_KEY=
 
     # Other necessary variables (if any)
-    # e.g., NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
+    # e.g., NEXT_PUBLIC_API_BASE_URL=
     ```
     *Note: Ensure Firebase Admin SDK setup is correctly configured if used in API routes.*
 
