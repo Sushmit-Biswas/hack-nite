@@ -100,8 +100,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
             <Image src="/logo.svg" alt="logo" height={32} width={38} />
             <h2 className="text-primary-100">MockMate</h2>
           </div>
-
-          <h3>AI mock interviews and resume check</h3>
+            <h3 className="text-center">AI mock interviews and resume check</h3>
 
           <Form {...form}>
             <form
