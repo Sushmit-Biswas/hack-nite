@@ -146,7 +146,7 @@ Please ensure your code adheres to the project's coding standards and includes t
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details (if one exists, otherwise state MIT).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -154,8 +154,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *   Inspiration from similar AI interview platforms.
 *   Thanks to the creators of the libraries and tools used.
-*   Shoutout to the Hackathon organizers/community (if applicable).
+*   Shoutout to the Hackathon organizers/community.
 
 ---
 
-Made with ❤️ and lots of ☕ by NexusKnight
+Made with ❤️ and lots of ☕ by ```Sushmit Biswas``` from Team ```NexusKnight```
