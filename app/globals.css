@@ -22,7 +22,7 @@
 
   --font-mona-sans: "Mona Sans", sans-serif;
 
-  --bg-pattern: url("/pattern.png");
+  --bg-pattern: url("/pattern5.jpg");
 }
 
 :root {
@@ -248,10 +248,23 @@
   }
 
   .section-feedback {
-    @apply flex flex-col gap-8 max-w-5xl mx-auto max-sm:px-4 text-lg leading-7;
+    @apply flex flex-col gap-8 max-w-5xl mx-auto max-sm:px-4 text-lg leading-7 pattern;
 
     .buttons {
       @apply flex w-full justify-evenly gap-4 max-sm:flex-col max-sm:items-center;
+    }
+    
+    .glass-container {
+      @apply relative overflow-hidden rounded-2xl backdrop-blur-md bg-dark-100/30 p-8 shadow-xl;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 
+              0 6px 20px rgba(0, 0, 0, 0.15);
+      
+      &:before {
+        content: '';
+        @apply absolute inset-0 bg-inherit -m-5 blur-md;
+        box-shadow: inset 0 0 500px rgba(255, 255, 255, .1);
+        z-index: -1;
+      }
     }
   }
 
@@ -301,7 +314,15 @@
 }
 
 @utility pattern {
-  @apply bg-[url('/pattern.png')] bg-top bg-no-repeat;
+  @apply bg-[url('/pattern1.jpg')] bg-top bg-no-repeat bg-fixed bg-cover;
+}
+
+@utility pattern-interview {
+  @apply bg-[url('/pattern3.jpg')] bg-top bg-no-repeat bg-fixed bg-cover;
+}
+
+@utility pattern-feedback {
+  @apply bg-[url('/pattern5.jpg')] bg-top bg-no-repeat bg-fixed bg-cover;
 }
 
 @utility blue-gradient-dark {
@@ -318,6 +339,19 @@
 
 @utility animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+@utility glass-effect {
+  @apply relative overflow-hidden rounded-2xl backdrop-blur-md bg-dark-100/30 shadow-xl;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 
+              0 6px 20px rgba(0, 0, 0, 0.15);
+  
+  &:before {
+    content: '';
+    @apply absolute inset-0 bg-inherit -m-5 blur-md;
+    box-shadow: inset 0 0 500px rgba(255, 255, 255, .1);
+    z-index: -1;
+  }
 }
 
 @keyframes fadeIn {
