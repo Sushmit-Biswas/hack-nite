@@ -2,6 +2,7 @@
 
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
+import { DecodedIdToken } from "firebase-admin/auth";
 
 // Session duration (1 week)
 const SESSION_DURATION = 60 * 60 * 24 * 7;
@@ -49,11 +50,11 @@ export async function signUp(params: SignUpParams) {
       success: true,
       message: "Account created successfully. Please sign in.",
     };
-  } catch (error: any) { // ignore eslint error
+  } catch (error: unknown) {
     console.error("Error creating user:", error);
 
-    // Handle Firebase specific errors
-    if (error.code === "auth/email-already-exists") {
+    // Handle Firebase specific errors (assuming Firebase errors have a 'code' property)
+    if (typeof error === 'object' && error !== null && 'code' in error && error.code === "auth/email-already-exists") {
       return {
         success: false,
         message: "This email is already in use",
@@ -72,15 +73,25 @@ export async function signIn(params: SignInParams) {
 
   try {
     const userRecord = await auth.getUserByEmail(email);
-    if (!userRecord)
+    if (!userRecord) {
       return {
         success: false,
         message: "User does not exist. Create an account.",
       };
+    }
+
+    // Check if email is verified
+    if (!userRecord.emailVerified) {
+      return {
+        success: false,
+        message: "Please verify your email address before signing in.",
+      };
+    }
 
     await setSessionCookie(idToken);
-  } catch (error: any) {
-    console.log(error);
+    return { success: true }; // Added success return
+  } catch (error: unknown) {
+    console.error("Sign in error:", error);
 
     return {
       success: false,
@@ -129,4 +140,57 @@ export async function getCurrentUser(): Promise<User | null> {
 export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
+}
+
+// Sign in with provider (e.g., Google)
+export async function signInWithProvider(params: {
+  idToken: string;
+  name: string | null;
+  email: string | null;
+  photoURL: string | null;
+}) {
+  const { idToken, name, email, photoURL } = params;
+
+  try {
+    // Verify the ID token
+    const decodedToken: DecodedIdToken = await auth.verifyIdToken(idToken);
+    const uid = decodedToken.uid;
+
+    // Check if user exists in Firestore
+    const userRef = db.collection("users").doc(uid);
+    const userSnap = await userRef.get();
+
+    if (!userSnap.exists) {
+      // Create new user document if it doesn't exist
+      await userRef.set({
+        name: name ?? "User", // Use "User" if name is null
+        email: email,
+        photoURL: photoURL,
+        createdAt: new Date(), // Add a creation timestamp
+      });
+    } else {
+      // Optionally update existing user data (e.g., photoURL if changed)
+      const updates: { [key: string]: string } = {}; // Use string type for values
+      if (photoURL && userSnap.data()?.photoURL !== photoURL) {
+        updates.photoURL = photoURL;
+      }
+      if (name && userSnap.data()?.name !== name) {
+        updates.name = name;
+      }
+      if (Object.keys(updates).length > 0) {
+        await userRef.update(updates);
+      }
+    }
+
+    // Create session cookie
+    await setSessionCookie(idToken);
+
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Provider sign-in error:", error);
+    return {
+      success: false,
+      message: "Failed to sign in with provider. Please try again.",
+    };
+  }
 }
